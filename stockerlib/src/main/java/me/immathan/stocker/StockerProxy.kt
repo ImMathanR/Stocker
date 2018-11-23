@@ -1,5 +1,6 @@
 package me.immathan.stocker
 
+import me.immathan.stocker.internal.Request
 import me.immathan.stocker.internal.Result
 
 /**
@@ -9,7 +10,9 @@ import me.immathan.stocker.internal.Result
  */
 interface StockerProxy {
 
-    fun fetch(url: String, responseHandler: ResponseHandler)
+    fun fetch(url: String, responseHandler: ResponseHandler): Request
+
+    fun cancel(request: Request)
 
 }
 

@@ -30,15 +30,15 @@ class AssetManager(context: Context, private val cacheSettings: CacheSettings) {
     init {
         when(cacheSettings.getCacheStrategy()) {
             CacheStrategy.NO_CACHE -> {
-                Logger.d(TAG, "No caching added")
+                Logger.i(TAG, "No caching selected")
             }
             CacheStrategy.MEM_CACHE -> {
-                Logger.d(TAG, "Preparing Memory Cache")
+                Logger.i(TAG, "Preparing Memory Cache")
                 cacheMakers.add(StockerMemCache.getInstance(context, cacheSettings.getMemCacheSize()))
             }
             CacheStrategy.DISK_CACHE -> { // This is assuming that if the disk cache is enabled
                 // Memory cache can be added as an additional caching layer
-                Logger.d(TAG, "Preparing Disk cache and Mem Cache")
+                Logger.i(TAG, "Preparing Disk cache and Mem Cache")
                 cacheMakers.add(StockerMemCache.getInstance(context, cacheSettings.getMemCacheSize()))
                 cacheMakers.add(StockerDiskCache.getInstance(context, cacheSettings.getMemCacheSize()))
                 // In case Disk cache also added in the feature
@@ -47,17 +47,7 @@ class AssetManager(context: Context, private val cacheSettings: CacheSettings) {
     }
 
     fun fetch(url: String, cacheListener: CacheListener) {
-        synchronized(downloadCallbacks) {
-            val cacheListeners = downloadCallbacks[url]
-            if(cacheListeners != null) {
-                cacheListeners.add(cacheListener)
-                downloadCallbacks[url] = cacheListeners
-                return
-            } else {
-                downloadCallbacks[url] = mutableListOf(cacheListener)
-            }
-        }
-
+        addToDownloadCallback(url, cacheListener)
         GlobalScope.launch(Dispatchers.IO) {
             for (cache in cacheMakers) {
                 Logger.d(TAG, "Total size: ${cache.sizeOf()} and available size: ${cache.remainingSize()}")
@@ -87,6 +77,23 @@ class AssetManager(context: Context, private val cacheSettings: CacheSettings) {
                         sendAssetCacheResponse(url, true, result)
                     }
                 }
+            }
+        }
+    }
+
+    internal fun cancel(url: String) {
+
+    }
+
+    private fun addToDownloadCallback(url: String, cacheListener: CacheListener) {
+        synchronized(downloadCallbacks) {
+            val cacheListeners = downloadCallbacks[url]
+            if(cacheListeners != null) {
+                cacheListeners.add(cacheListener)
+                downloadCallbacks[url] = cacheListeners
+                return
+            } else {
+                downloadCallbacks[url] = mutableListOf(cacheListener)
             }
         }
     }
