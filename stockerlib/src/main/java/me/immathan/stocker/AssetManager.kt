@@ -58,9 +58,7 @@ class AssetManager(context: Context, private val cacheSettings: CacheSettings) {
             }
         }
 
-        Logger.d(TAG, "Fetch before: ${Thread.currentThread().name}")
         GlobalScope.launch(Dispatchers.IO) {
-            Logger.d(TAG, "Fetch inside launch : ${Thread.currentThread().name}")
             for (cache in cacheMakers) {
                 Logger.d(TAG, "Total size: ${cache.sizeOf()} and available size: ${cache.remainingSize()}")
                 val result = cache.get(url).await()

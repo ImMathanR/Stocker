@@ -2,7 +2,6 @@ package me.immathan.stocker.network
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import me.immathan.stocker.utils.Logger
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.BufferedReader
@@ -20,7 +19,6 @@ class Downloader {
     }
 
     suspend fun download(url: String) : ByteArray? = withContext(Dispatchers.IO) {
-        Logger.d(TAG, "Downloader: ${Thread.currentThread().name}")
         val request = Request.Builder().url(url)
                 .build()
         val response = client.newCall(request).execute()

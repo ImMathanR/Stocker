@@ -8,7 +8,6 @@ import me.immathan.stocker.cache.CacheSettings
 import me.immathan.stocker.internal.Response
 import me.immathan.stocker.internal.Result
 import me.immathan.stocker.internal.StockerError
-import me.immathan.stocker.utils.Logger
 
 /**
  * Actual implementation of [Stocker].
@@ -33,9 +32,7 @@ class StockerImpl(val context: Context, cacheSettings: CacheSettings) : StockerP
                     Response(false, error = error)
                 }
                 val result = Result(responseObject)
-                Logger.d(TAG, "Before result: ${Thread.currentThread().name}")
                 GlobalScope.launch(Dispatchers.Main) {
-                    Logger.d(TAG, "Result main: ${Thread.currentThread().name}")
                     responseHandler(result)
                 }
             }
