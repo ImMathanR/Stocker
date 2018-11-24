@@ -16,4 +16,7 @@ interface StockerProxy {
 
 }
 
+/**
+ * Higher order function to use as a callback for downloading events
+ */
 typealias ResponseHandler = (Result) -> Unit

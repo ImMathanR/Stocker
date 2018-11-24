@@ -6,7 +6,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 
 /**
- * Just a mock Disk cache class that can be implemented if needed
+ *
+ * Disk cache implementation
+ *
+ * TODO: Not yet started
+ *
  * @author Mathan on 23/11/18
  */
 class StockerDiskCache<Key: Any, Value: Any> private constructor

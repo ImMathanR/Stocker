@@ -23,28 +23,28 @@ class StockerImpl(val context: Context, cacheSettings: CacheSettings) : StockerP
     }
 
     override fun fetch(url: String, responseHandler: ResponseHandler): Request {
-        GlobalScope.launch(Dispatchers.IO) {
-            assetManager.fetch(url) { _, status, response ->
-                val responseObject : Response
-                responseObject = if(response != null) {
-                    Response(status, response as ByteArray?)
-                } else {
-                    val error = StockerError("Download failed")
-                    Response(false, error = error)
-                }
-                val result = Result(responseObject)
-                GlobalScope.launch(Dispatchers.Main) {
-                    responseHandler(result)
-                }
+        val cacheListener = getCacheListener(responseHandler)
+        assetManager.fetch(url, cacheListener)
+        return Request(url, cacheListener)
+    }
+
+    private fun getCacheListener(responseHandler: ResponseHandler): CacheListener {
+        return { _, status, response ->
+            val responseObject : Response
+            responseObject = if(response != null) {
+                Response(status, response as ByteArray?)
+            } else {
+                val error = StockerError("Download failed")
+                Response(false, error = error)
+            }
+            val result = Result(responseObject)
+            GlobalScope.launch(Dispatchers.Main) {
+                responseHandler(result)
             }
         }
-        return Request(url)
     }
 
     override fun cancel(request: Request) {
-        GlobalScope.launch(Dispatchers.IO) {
-
-        }
+        assetManager.cancel(request)
     }
-
 }
