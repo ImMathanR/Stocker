@@ -34,6 +34,9 @@ Stocker.bind(IMAGE_URL_AS_STRING, imageView)
 ```
 It will download and render the image asset on the ImageView
 
+### Usage
+To use **Stocker** Library goto the [Release](https://github.com/ImMathanR/Stocker/releases/tag/r0.1) page and download the aar.
+
 ### Stocker Advantage
 Stocker manages Memory caching by default with the best fit Memory size for your device. If you want to change it you can
 do it the following way
@@ -66,3 +69,7 @@ val stocker = Stocker.Builder(applicationContext)
 ### TODO
 * Unit Testing
 * Optimizing Image binding
+* Publish to Gradle
+
+### Important
+You can also read about the Design decisions about the Sample app and Library inside the relevant folders README.
