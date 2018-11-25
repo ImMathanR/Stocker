@@ -27,7 +27,7 @@ class StockerApp : Application() {
                 .redFlagPercentage(.1f) // set red indicator for 10%....different from default
                 .startingXPosition(600)
                 .startingYPosition(600)
-                .show(applicationContext)
+                //.show(applicationContext)
     }
 
 }

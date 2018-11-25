@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 })
                 .build()
-        
+
         pinsAdapter = PinsListAdapter(stocker)
 
         pinsRV.setHasFixedSize(true)

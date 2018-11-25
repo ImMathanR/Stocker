@@ -12,16 +12,22 @@ object Logger {
      */
     private const val TAG = "STOCKER"
 
+    public var DEBUG = false
+
     fun i(tag: String, msg: String) {
         Log.i(getTag(tag), msg)
     }
 
     fun d(tag: String, msg: String) {
-        Log.v(getTag(tag), msg)
+        if(DEBUG) {
+            Log.v(getTag(tag), msg)
+        }
     }
 
     fun d(tag: String, msg: String, throwable: Throwable) {
-        Log.v(getTag(tag), "[ERROR] " + msg + "\nError: " + throwable.localizedMessage)
+        if(DEBUG) {
+            Log.v(getTag(tag), "[ERROR] " + msg + "\nError: " + throwable.localizedMessage)
+        }
     }
 
     fun e(tag: String, msg: String) {
