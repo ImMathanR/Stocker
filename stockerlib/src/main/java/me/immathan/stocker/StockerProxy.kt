@@ -1,5 +1,6 @@
 package me.immathan.stocker
 
+import android.widget.ImageView
 import me.immathan.stocker.internal.Request
 import me.immathan.stocker.internal.Result
 
@@ -13,6 +14,8 @@ interface StockerProxy {
     fun fetch(url: String, responseHandler: ResponseHandler): Request
 
     fun cancel(request: Request)
+
+    fun load(url: String, imageVIew: ImageView)
 
 }
 

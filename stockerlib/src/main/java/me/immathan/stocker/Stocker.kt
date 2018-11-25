@@ -1,6 +1,7 @@
 package me.immathan.stocker
 
 import android.content.Context
+import android.widget.ImageView
 import me.immathan.stocker.cache.CacheSettings
 import me.immathan.stocker.internal.Request
 import me.immathan.stocker.utils.Logger
@@ -24,6 +25,10 @@ class Stocker private constructor(builder : Stocker.Builder) {
     companion object {
         private var stockerProxy: StockerProxy? = null
         private val TAG = Stocker::class.java.simpleName!!
+
+        fun load(url: String, imageView: ImageView) {
+            
+        }
     }
 
     init {

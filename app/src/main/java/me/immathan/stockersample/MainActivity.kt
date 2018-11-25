@@ -1,12 +1,19 @@
 package me.immathan.stockersample
 
+import android.animation.Animator
+import android.arch.lifecycle.Observer
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.StaggeredGridLayoutManager
+import android.view.View
+import android.view.ViewAnimationUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import me.immathan.stocker.Stocker
 import me.immathan.stocker.cache.CacheSettings
 import me.immathan.stocker.cache.CacheStrategy
-import me.immathan.stocker.utils.Logger
+import me.immathan.stockersample.adapter.PinsListAdapter
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,11 +21,21 @@ class MainActivity : AppCompatActivity() {
         private val TAG = MainActivity::class.java.simpleName!!
     }
 
+    private val appComponent by lazy {
+        (application as StockerApp).appComponent
+    }
+
+    private val pinsViewModel by lazy {
+        appComponent.getPinsViewModel(this, appComponent.getFetchPinsUseCas(appComponent.apiInterface))
+    }
+
+    private var pinsAdapter : PinsListAdapter? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val stocker = Stocker.Builder(this)
+        val stocker = Stocker.Builder(applicationContext)
                 .cacheSettings(object: CacheSettings {
                     override fun getCacheStrategy(): CacheStrategy {
                         return CacheStrategy.MEM_CACHE
@@ -26,26 +43,63 @@ class MainActivity : AppCompatActivity() {
                 })
                 .build()
 
-        button.setOnClickListener {
-            val request1 = stocker.fetch("http://lab.greedygame.com/mathan-dev/skype.png") {
-                val (body, status, error) = it
-                Logger.d(TAG, "Fetched 1 $status")
+        pinsAdapter = PinsListAdapter(stocker)
+
+        pinsRV.setHasFixedSize(true)
+        pinsRV.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
+        pinsRV.adapter = pinsAdapter
+
+        registerViewModel()
+        pinsViewModel.getPins()
+    }
+
+    private fun registerViewModel() {
+        pinsViewModel.pinsLoadLiveData.observe(this, Observer {
+            pinsRV.visibility = View.VISIBLE
+            hideLoader {
+                pinsAdapter!!.pinsList = it
+                pinsAdapter!!.notifyDataSetChanged()
             }
-            stocker.cancel(request1)
-            Logger.d(TAG, "Request created 1")
-            val request2 = stocker.fetch("http://lab.greedygame.com/mathan-dev/skype.png") {
-                val (body, status, error) = it
-                Logger.d(TAG, "Fetched 2 $status")
-            }
-            Logger.d(TAG, "Cancel request")
-            val request3 = stocker.fetch("http://lab.greedygame.com/mathan-dev/workspace/temp/sdk_init.html") {
-                val (body, status, error) = it
-                Logger.d(TAG, "Fetched 3 $status")
-            }
-            val request4 = stocker.fetch("http://lab.greedygame.com/mathan-dev/workspace/mediation/templates/stroke.json") {
-                val (body, status, error) = it
-                Logger.d(TAG, "Fetched 4 $status")
-            }
+        })
+        pinsViewModel.pinsErrorLiveData.observe(this, Observer {
+
+        })
+        pinsViewModel.loadingLiveData.observe(this, Observer {
+
+        })
+    }
+
+    private fun hideLoader(callback: Callback) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val startRadius = 0
+            val endRadius = Math.hypot(parentView.width.toDouble(), parentView.height.toDouble()).toInt()
+            val anim = ViewAnimationUtils.createCircularReveal(loader, ((loader.x + loader.width / 2).toInt()), ((loader.y + loader.height / 2).toInt()), startRadius.toFloat(), endRadius.toFloat())
+            anim.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(p0: Animator?) {
+
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+                    loader.visibility = View.GONE
+                    pinsRV.visibility = View.VISIBLE
+                    callback()
+                }
+
+                override fun onAnimationStart(p0: Animator?) {
+
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+
+                }
+            })
+            anim.start()
+        } else {
+            loader.visibility = View.GONE
+            pinsRV.visibility = View.VISIBLE
         }
+
     }
 }
+
+typealias Callback = () -> Unit

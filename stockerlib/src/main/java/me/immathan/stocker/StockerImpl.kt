@@ -1,6 +1,7 @@
 package me.immathan.stocker
 
 import android.content.Context
+import android.widget.ImageView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -47,4 +48,9 @@ class StockerImpl(val context: Context, cacheSettings: CacheSettings) : StockerP
     override fun cancel(request: Request) {
         assetManager.cancel(request)
     }
+
+    override fun load(url: String, imageVIew: ImageView) {
+
+    }
+
 }
