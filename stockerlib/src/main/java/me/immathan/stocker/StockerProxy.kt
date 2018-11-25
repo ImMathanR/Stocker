@@ -15,7 +15,7 @@ interface StockerProxy {
 
     fun cancel(request: Request)
 
-    fun load(url: String, imageVIew: ImageView)
+    fun bind(url: String, imageVIew: ImageView)
 
 }
 

@@ -41,7 +41,7 @@ dependencies {
 
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
 
-    compile 'com.tbuonomo.andrui:circleloading:1.0.0'
+    implementation 'com.tbuonomo.andrui:circleloading:1.0.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

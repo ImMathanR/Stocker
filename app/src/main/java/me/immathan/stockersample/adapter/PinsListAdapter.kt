@@ -1,6 +1,5 @@
 package me.immathan.stockersample.adapter
 
-import android.graphics.BitmapFactory
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -30,12 +29,13 @@ class PinsListAdapter(private val stocker: Stocker): RecyclerView.Adapter<PinsLi
 
     override fun onBindViewHolder(pinsViewHolder: PinsViewHolder, position: Int) {
         val pin = pinsList!![position]
-        stocker.fetch(pin.urls.regular) {(body, status, error) ->
+        Stocker.bind(pin.urls.small, pinsViewHolder.image)
+        /*stocker.fetch(pin.urls.regular) {(body, status, error) ->
             if(status && body != null) {
                 val bitmap = BitmapFactory.decodeByteArray(body, 0, body.size)
                 pinsViewHolder.image.setImageBitmap(bitmap)
             }
-        }
+        }*/
     }
 
     class PinsViewHolder(view: View): RecyclerView.ViewHolder(view) {

@@ -4,8 +4,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.io.BufferedReader
-import java.io.InputStreamReader
 
 /**
  * @author Mathan on 23/11/18
@@ -24,14 +22,16 @@ class Downloader {
         val response = client.newCall(request).execute()
         if(response.isSuccessful && response.body() != null) {
             val inputStream = response.body()!!.byteStream()
-            val reader = BufferedReader(InputStreamReader(inputStream))
+            /*val reader = BufferedReader(InputStreamReader(inputStream))
             val line = reader.readLine()
             var result = line
             reader.forEachLine {
                 result += line
             }
-            response.body()!!.close()
-            return@withContext result.toByteArray()
+            response.body()!!.close()*/
+
+            //val bytes = inputStream.bufferedReader().use(BufferedReader::readText).toByteArray()
+            return@withContext inputStream.readBytes()
         }
         return@withContext null
     }

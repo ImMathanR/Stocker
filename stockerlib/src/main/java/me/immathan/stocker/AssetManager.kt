@@ -69,6 +69,7 @@ class AssetManager(context: Context, private val cacheSettings: CacheSettings) {
                 }
                 val response = downloader.download(url)
                 if (response == null) {
+                    Logger.d(TAG, "Response null")
                     sendAssetCacheResponse(url, false, null)
                     return@launch
                 } else {
@@ -83,6 +84,7 @@ class AssetManager(context: Context, private val cacheSettings: CacheSettings) {
                     for (cache in cacheMakers) {
                         val result = cache.get(url).await()
                         if(result != null) {
+                            Logger.d(TAG, "Callback given")
                             sendAssetCacheResponse(url, true, result)
                         }
                     }
@@ -104,6 +106,7 @@ class AssetManager(context: Context, private val cacheSettings: CacheSettings) {
                     if (cacheListenerList.size == 0) {
                         // No other requests needs the url asset.
                         job.cancel()
+                        jobsMap.remove(request.url)
                         Logger.d(TAG, "No Request available. Cancelling the job")
                     } else {
                         Logger.d(TAG, "Another Request found. Not cancelling the Job")

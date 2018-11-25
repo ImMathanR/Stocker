@@ -13,6 +13,7 @@ import me.immathan.stocker.Stocker
 import me.immathan.stocker.cache.CacheSettings
 import me.immathan.stocker.cache.CacheStrategy
 import me.immathan.stockersample.adapter.PinsListAdapter
+import me.immathan.stockersample.utils.ItemOffsetDecoration
 
 
 class MainActivity : AppCompatActivity() {
@@ -47,6 +48,9 @@ class MainActivity : AppCompatActivity() {
 
         pinsRV.setHasFixedSize(true)
         pinsRV.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
+        val itemDecoration = ItemOffsetDecoration(applicationContext, R.dimen.rv_offset)
+        pinsRV.addItemDecoration(itemDecoration)
+
         pinsRV.adapter = pinsAdapter
 
         registerViewModel()
@@ -55,7 +59,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun registerViewModel() {
         pinsViewModel.pinsLoadLiveData.observe(this, Observer {
-            pinsRV.visibility = View.VISIBLE
             hideLoader {
                 pinsAdapter!!.pinsList = it
                 pinsAdapter!!.notifyDataSetChanged()

@@ -6,10 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.immathan.stocker.cache.CacheSettings
-import me.immathan.stocker.internal.Request
-import me.immathan.stocker.internal.Response
-import me.immathan.stocker.internal.Result
-import me.immathan.stocker.internal.StockerError
+import me.immathan.stocker.internal.*
 
 /**
  * Actual implementation of [Stocker].
@@ -18,6 +15,7 @@ import me.immathan.stocker.internal.StockerError
 class StockerImpl(val context: Context, cacheSettings: CacheSettings) : StockerProxy {
 
     private val assetManager = AssetManager(context, cacheSettings)
+    private val imageLoader = ImageLoader(assetManager)
 
     companion object {
         private val TAG = StockerImpl::class.java.simpleName!!
@@ -49,8 +47,8 @@ class StockerImpl(val context: Context, cacheSettings: CacheSettings) : StockerP
         assetManager.cancel(request)
     }
 
-    override fun load(url: String, imageVIew: ImageView) {
-
+    override fun bind(url: String, imageVIew: ImageView) {
+        imageLoader.bind(url, imageVIew)
     }
 
 }

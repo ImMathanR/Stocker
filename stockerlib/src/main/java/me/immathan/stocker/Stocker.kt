@@ -26,8 +26,8 @@ class Stocker private constructor(builder : Stocker.Builder) {
         private var stockerProxy: StockerProxy? = null
         private val TAG = Stocker::class.java.simpleName!!
 
-        fun load(url: String, imageView: ImageView) {
-            
+        fun bind(url: String, imageView: ImageView) {
+            stockerProxy?.bind(url, imageView)
         }
     }
 
