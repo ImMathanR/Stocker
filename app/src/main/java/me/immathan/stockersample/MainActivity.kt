@@ -44,6 +44,10 @@ class MainActivity : AppCompatActivity() {
                 })
                 .build()
 
+        stocker.fetch("") {(body, status, error) ->
+
+        }
+
         pinsAdapter = PinsListAdapter(stocker)
 
         pinsRV.setHasFixedSize(true)

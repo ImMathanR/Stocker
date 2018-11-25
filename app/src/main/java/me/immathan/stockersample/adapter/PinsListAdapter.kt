@@ -30,12 +30,6 @@ class PinsListAdapter(private val stocker: Stocker): RecyclerView.Adapter<PinsLi
     override fun onBindViewHolder(pinsViewHolder: PinsViewHolder, position: Int) {
         val pin = pinsList!![position]
         Stocker.bind(pin.urls.small, pinsViewHolder.image)
-        /*stocker.fetch(pin.urls.regular) {(body, status, error) ->
-            if(status && body != null) {
-                val bitmap = BitmapFactory.decodeByteArray(body, 0, body.size)
-                pinsViewHolder.image.setImageBitmap(bitmap)
-            }
-        }*/
     }
 
     class PinsViewHolder(view: View): RecyclerView.ViewHolder(view) {
